@@ -4,7 +4,9 @@ Free and open-source hardware spoofer for Windows. Changes hardware identifiers 
 This isn't my best work by far, but I am releasing this for free for everyone to use. TPM bypasses aren't included.
 
 Virustotal: https://www.virustotal.com/gui/file/34fe9ee1dee23c32e61cea579abe0c332806c90f6a09e8d03573c7d3e73b8d80?nocache=1
-There are a few false positives but you are not forced to run this if you don't trust it
+There are a few false positives but you are not forced to run this if you don't trust it.
+
+Highest success rate on Gigabyte motherboards.
 
 ## Features
 
