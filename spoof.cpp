@@ -9,6 +9,9 @@
 #include <sstream>
 #include <filesystem>
 
+static HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
+static void color(int c) { SetConsoleTextAttribute(hcon, c); }
+
 static std::mt19937 rng(static_cast<unsigned>(std::time(nullptr)));
 
 static std::string roll(int len, const char* pool) {
@@ -122,7 +125,14 @@ static void wmi() {
 
 // print serials to screen
 static void info() {
-    printf("\n -----Motherboard Info-----\n");
+    color(11);
+    printf("\n");
+    printf("   ___          _      _    \n");
+    printf("  / __| ___ _ _(_)__ _| |___\n");
+    printf("  \\__ \\/ -_) '_| / _` | (_-<\n");
+    printf("  |___/\\___|_| |_\\__,_|_/__/\n");
+    printf("\n");
+    color(7);
     printf(" Motherboard Manufacturer: %s\n", wmic("wmic baseboard get manufacturer").c_str());
     printf(" Motherboard Name: %s\n", wmic("wmic baseboard get product").c_str());
     printf(" BIOS Version: %s\n", wmic("wmic bios get version").c_str());
@@ -331,8 +341,16 @@ static bool msiamd(const std::string& model) {
 }
 
 static bool smbios() {
+    color(11);
+    printf("\n");
+    printf("   ___ __  __ ___ ___ ___  ___ \n");
+    printf("  / __|  \\/  | _ )_ _/ _ \\/ __|\n");
+    printf("  \\__ \\ |\\/| | _ \\| | (_) \\__ \\\n");
+    printf("  |___/_|  |_|___/___\\___/|___/\n");
+    printf("\n");
+    color(7);
     reset();
-    printf("\nCPU type:\n  1. Intel\n  2. AMD\nChoice: ");
+    printf("CPU type:\n  1. Intel\n  2. AMD\nChoice: ");
     int cpu;
     if (scanf("%d", &cpu) != 1) { getchar(); return false; }
     getchar();
@@ -378,7 +396,14 @@ static Board detect() {
 //detects your cpu + motherboard combination before spoofing, if included in smbios fixer, it'll give you legitimate serials
 
 static bool oneclick() {
-    printf("\n--- One Click Spoof ---\n");
+    color(11);
+    printf("\n");
+    printf("    ___              ___ _ _    _   \n");
+    printf("   / _ \\ _ _  ___  / __| (_)__| |__\n");
+    printf("  | (_) | ' \\/ -_)| (__| | / _| / /\n");
+    printf("   \\___/|_||_\\___| \\___|_|_\\__|_\\_\\\n");
+    printf("\n");
+    color(7);
     reset();
     bool ok = true;
     if (!renamepc()) ok = false;
@@ -406,7 +431,14 @@ static bool oneclick() {
 //prints tpm hashes
 
 static void tpm() {
-    printf("\n--- TPM Hashes ---\n");
+    color(11);
+    printf("\n");
+    printf("   _____ ___ __  __\n");
+    printf("  |_   _| _ \\  \\/  |\n");
+    printf("    | | |  _/ |\\/| |\n");
+    printf("    |_| |_| |_|  |_|\n");
+    printf("\n");
+    color(7);
     std::string out = capture(
         "powershell -Command \""
         "$h = (Get-TpmEndorsementKeyInfo -Hash sha256).PublicKeyHash;"
@@ -422,35 +454,60 @@ static void tpm() {
 
 
 static void banner() {
-    printf("========================================\n");
-    printf("        Skyyware Spoofer                \n");
-    printf("========================================\n");
+    color(11);
+    printf("\n");
+    printf("   ____  _                                       \n");
+    printf("  / ___|| | ___   _ _   ___      ____ _ _ __ ___ \n");
+    printf("  \\___ \\| |/ / | | | | | \\ \\ /\\ / / _` | '__/ _ \\\n");
+    printf("   ___) |   <| |_| | |_| |\\ V  V / (_| | | |  __/\n");
+    printf("  |____/|_|\\_\\\\__, |\\__, | \\_/\\_/ \\__,_|_|  \\___|\n");
+    printf("               |___/ |___/                        \n");
+    color(7);
+    printf("\n");
 }
 
 static void menu() {
     banner();
-    printf("\n\n");
-    printf("  1. One Click Spoof\n");
-    printf("  2. SMBIOS Fixer\n");
-    printf("  3. TPM Checker\n");
-    printf("  4. Show Serials\n");
-    printf("  0. Exit\n");
-    printf("========================================\nChoice: ");
+    printf("   "); color(11); printf("[1]"); color(7); printf(" One Click Spoof\n");
+    printf("   "); color(11); printf("[2]"); color(7); printf(" SMBIOS Fixer\n");
+    printf("   "); color(11); printf("[3]"); color(7); printf(" TPM Checker\n");
+    printf("   "); color(11); printf("[4]"); color(7); printf(" Show Serials\n\n");
+    printf("   "); color(12); printf("[0]"); color(7); printf(" Exit\n\n");
+    color(8); printf("                  github.com/appletised\n\n");
+    color(7);
+    printf("  Choice: ");
+}
+
+static void hide() {
+    std::string dir = here();
+    const char* files[] = {
+        "AMIDEWINx64.EXE", "AMIDEWIN.EXE", "DMI16.EXE", "DMIEDIT.EXE",
+        "amifldrv64.sys", "UCOREDLL.DLL", "UCORESYS.SYS", "UCOREVXD.VXD",
+        "UCOREW64.SYS", "Volumeid.exe", "Volumeid64.exe",
+        "spoofer.bat", "spoofs.manifest", "spoofs.rc"
+    };
+    for (auto& f : files) {
+        std::string p = dir + "\\" + f;
+        DWORD a = GetFileAttributesA(p.c_str());
+        if (a != INVALID_FILE_ATTRIBUTES && !(a & FILE_ATTRIBUTE_HIDDEN))
+            SetFileAttributesA(p.c_str(), a | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+    }
 }
 
 int main() {
+    hide();
     SetConsoleTitleA("discord.gg/skyyware (FREE SPOOFER)");
     banner();
-    printf("\n  By using this software you agree to\n");
-    printf("  the following terms:\n\n");
-    printf("  - This tool is provided as-is with no\n");
-    printf("    warranty of any kind.\n");
-    printf("  - We take no responsibility for any\n");
-    printf("    damage, bans, or issues caused.\n");
-    printf("  - Use at your own risk.\n");
-    printf("  - May not work for all motherboards.\n");
-    printf("\n========================================\n");
-    printf("  Press Enter to accept and continue...");
+    color(7);
+    printf("   By using this software you agree\n");
+    printf("   to the following:\n\n");
+    printf("   - Provided as-is, no warranty\n");
+    printf("   - You accept full responsibility for any damages, bans or issues\n");
+    printf("   - Use at your own risk\n");
+    printf("   - May not work on all boards\n\n");
+    color(11);
+    printf("   Press Enter to accept and continue...");
+    color(7);
     getchar();
     system("cls");
 
