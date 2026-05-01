@@ -10,10 +10,10 @@ This isn't my best work by far, but I am releasing this for free for everyone to
 - **TPM Checker** — displays TPM endorsement key hashes
 - **Serial Viewer** — shows current motherboard info, serials, and MAC addresses
 
-## Supported Motherboards
+## Supported Motherboards for SMBIOS Fixer
 
 - ASUS (Intel & AMD)
-- Gigabyte
+- Gigabyte (Intel & AMD)
 - MSI (Intel & AMD)
 
 ## Requirements
