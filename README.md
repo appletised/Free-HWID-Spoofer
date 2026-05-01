@@ -24,7 +24,7 @@ This isn't my best work by far, but I am releasing this for free for everyone to
 
 ## Usage
 
-1. Download the latest release
+1. Download the latest release and extract the files
 2. Run `spoof.exe` as administrator
 3. Accept the disclaimer
 4. Have fun
